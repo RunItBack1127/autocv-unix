@@ -59,6 +59,12 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 github = Github(os.environ.get("GITHUB_TOKEN"))
 repo = github.get_user().get_repo("autocv-cover-letters")
 
+# Initialize generation directories
+os.mkdir(f"{MICROSERVICES_DIR}/generated")
+os.mkdir(f"{DATABASES_DIR}/generated")
+os.mkdir(f"{DEFAULT_COVER_LETTER_DIR}/generated")
+os.mkdir(f"{SD_COVER_LETTER_DIR}/generated")
+
 """
     GET endpoint for populating the resume template,
     with options for modifying the languages and

@@ -23,8 +23,6 @@ yarn run dev
 ### Running the backend separately
 The app uses a `Python` wrapper around the GitHub REST API ([pygithub](https://github.com/PyGithub/PyGithub)) - the library is initialized with a `Personal Access Token` (steps for generating this token can be found [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)), and the token is read from the backend through the `GITHUB_TOKEN` environment variable. 
 
-*NOTE: Although the app is built for Windows, the backend can at least be **initialized** on OSX and \*nix systems.*
-
 See more about setting up the backend [here](./src/backend/README.md).
 
 #### Windows environment setup

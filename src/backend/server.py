@@ -7,6 +7,7 @@ from github import Github
 import os
 import uuid
 import zipfile
+import tempfile
 
 TAB_TO_SPACES = "      "
 
@@ -104,7 +105,8 @@ def generate_resume():
                 output_doc.writestr(input_doc_info.filename, content)
     
     pdf_filename = output_filename.replace(".odt", ".pdf")
-    os.system(f"soffice --headless \"-env:UserInstallation=file:///tmp/AUTOCV\" --convert-to pdf:writer_pdf_Export --outdir {outdir} {output_filename}")
+    tmp_dir = tempfile.gettempdir()
+    os.system(f"soffice --headless \"-env:UserInstallation=file:///{tmp_dir}/AUTOCV\" --convert-to pdf:writer_pdf_Export --outdir {outdir} {output_filename}")
 
     github_pdf_path = f"Weston_P_Greene_Resume_{uuid.uuid4()}.pdf"
     pdf_contents = open(pdf_filename, "rb").read()
@@ -176,7 +178,8 @@ def generate_cover_letter():
                 output_doc.writestr(input_doc_info.filename, content)
     
     pdf_filename = output_filename.replace(".odt", ".pdf")
-    os.system(f"soffice --headless \"-env:UserInstallation=file:///tmp/AUTOCV\" --convert-to pdf:writer_pdf_Export --outdir {outdir} {output_filename}")
+    tmp_dir = tempfile.gettempdir()
+    os.system(f"soffice --headless \"-env:UserInstallation=file:///{tmp_dir}/AUTOCV\" --convert-to pdf:writer_pdf_Export --outdir {outdir} {output_filename}")
 
     github_pdf_path = f"Weston_P_Greene_Cover_Letter_{uuid.uuid4()}.pdf"
     pdf_contents = open(pdf_filename, "rb").read()

@@ -20,6 +20,9 @@ which soffice
 /opt/homebrew/soffice/bin
 ```
 
+### Installation for Windows
+Detailed instructions for the Windows installation can be [found in the LibreOffice documentation](https://www.libreoffice.org/get-help/install-howto/windows/).
+
 ### Installation for Linux
 Detailed instructions for the Linux installation can be [found in the LibreOffice documentation](https://www.libreoffice.org/get-help/install-howto/linux/).
 

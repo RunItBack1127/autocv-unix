@@ -2,9 +2,6 @@ from re import L
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-from docx import Document
-from docx.shared import Pt
-
 from github import Github
 
 import os

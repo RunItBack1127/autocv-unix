@@ -9,7 +9,7 @@
                 :skills="skills"
                 :disabled="skills.length === 7"
                 @modify-skill="(payload: ModifySkillPayload) => {
-                    if( payload.method === 'REMOVE' ) {
+                    if( payload.method === REMOVE_SKILL ) {
                         removeSkill(payload.skill);
                     }
                     else {
@@ -50,6 +50,7 @@ export default defineComponent({
         const store = useStore();
 
         return {
+            REMOVE_SKILL: ModifySkillMethod.REMOVE,
             skills: computed(() => store.state.resume.relevantSkills),
             competency: computed(() => store.state.resume.competency),
             setCompetency: (competency: string) => store.state.resume.competency = competency,

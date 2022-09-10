@@ -105,6 +105,7 @@ def generate_resume():
                 output_doc.writestr(input_doc_info.filename, content)
     
     pdf_filename = output_filename.replace(".odt", ".pdf")
+    outdir = f"templates/resume/{competency.lower()}/generated"
     tmp_dir = tempfile.gettempdir()
     os.system(f"soffice --headless \"-env:UserInstallation=file:///{tmp_dir}/AUTOCV\" --convert-to pdf:writer_pdf_Export --outdir {outdir} {output_filename}")
 

@@ -1,3 +1,4 @@
+from re import L
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -29,13 +30,21 @@ SOFTWARE_ENGINEER_PATH__DATABASES_GENERATED_RESUME = "templates/resume/databases
 FRONT_END_ENGINEER_PATH__DATABASES_GENERATED_RESUME = "templates/resume/databases/generated/WPG_Front_End_Engineer.odt"
 FULL_STACK_ENGINEER_PATH__DATABASES_GENERATED_RESUME = "templates/resume/databases/generated/WPG_Full_Stack_Engineer.odt"
 
-SOFTWARE_ENGINEER_PATH__COVER_LETTER = "templates/cover_letter/WPG_Software_Engineer.odt"
-FRONT_END_ENGINEER_PATH__COVER_LETTER = "templates/cover_letter/WPG_Front_End_Engineer.odt"
-FULL_STACK_ENGINEER_PATH__COVER_LETTER = "templates/cover_letter/WPG_Full_Stack_Engineer.odt"
+SOFTWARE_ENGINEER_PATH__DEFAULT_COVER_LETTER = "templates/cover_letter/default/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__DEFAULT_COVER_LETTER = "templates/cover_letter/default/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__DEFAULT_COVER_LETTER = "templates/cover_letter/default/WPG_Full_Stack_Engineer.odt"
 
-SOFTWARE_ENGINEER_PATH__GENERATED_COVER_LETTER = "templates/cover_letter/generated/WPG_Software_Engineer.odt"
-FRONT_END_ENGINEER_PATH__GENERATED_COVER_LETTER = "templates/cover_letter/generated/WPG_Front_End_Engineer.odt"
-FULL_STACK_ENGINEER_PATH__GENERATED_COVER_LETTER = "templates/cover_letter/generated/WPG_Full_Stack_Engineer.odt"
+SOFTWARE_ENGINEER_PATH__DEFAULT_GENERATED_COVER_LETTER = "templates/cover_letter/default/generated/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__DEFAULT_GENERATED_COVER_LETTER = "templates/cover_letter/default/generated/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__DEFAULT_GENERATED_COVER_LETTER = "templates/cover_letter/default/generated/WPG_Full_Stack_Engineer.odt"
+
+SOFTWARE_ENGINEER_PATH__SD_COVER_LETTER = "templates/cover_letter/sd/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__SD_COVER_LETTER = "templates/cover_letter/sd/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__SD_COVER_LETTER = "templates/cover_letter/sd/WPG_Full_Stack_Engineer.odt"
+
+SOFTWARE_ENGINEER_PATH__SD_GENERATED_COVER_LETTER = "templates/cover_letter/sd/generated/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__SD_GENERATED_COVER_LETTER = "templates/cover_letter/sd/generated/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__SD_GENERATED_COVER_LETTER = "templates/cover_letter/sd/generated/WPG_Full_Stack_Engineer.odt"
 
 def get_abs_path(filename):
     return os.path.abspath(filename)
@@ -98,7 +107,6 @@ def generate_resume():
                 output_doc.writestr(input_doc_info.filename, content)
     
     pdf_filename = output_filename.replace(".odt", ".pdf")
-    outdir = f"templates/resume/{competency.lower()}/generated"
     os.system(f"soffice --headless \"-env:UserInstallation=file:///tmp/AUTOCV\" --convert-to pdf:writer_pdf_Export --outdir {outdir} {output_filename}")
 
     github_pdf_path = f"Weston_P_Greene_Resume_{uuid.uuid4()}.pdf"
@@ -123,71 +131,62 @@ def generate_resume():
 def generate_cover_letter():
     input_filename = ""
     output_filename = ""
+    outdir = ""
     
     applicant_role = request.args["applicantRole"]
-    if applicant_role == "Software Engineer":
-        input_filename = SOFTWARE_ENGINEER_PATH__COVER_LETTER
-        output_filename = SOFTWARE_ENGINEER_PATH__GENERATED_COVER_LETTER
-    elif applicant_role == "Front End Engineer":
-        input_filename = FRONT_END_ENGINEER_PATH__COVER_LETTER
-        output_filename = FRONT_END_ENGINEER_PATH__GENERATED_COVER_LETTER
-    elif applicant_role == "Full Stack Engineer":
-        input_filename = FULL_STACK_ENGINEER_PATH__COVER_LETTER
-        output_filename = FULL_STACK_ENGINEER_PATH__GENERATED_COVER_LETTER
-
-    input_doc = Document(input_filename)
-
-    norm_style = input_doc.styles['Normal']
-    norm_font = norm_style.font
-
-    norm_font.name = "Radian Book"
-    norm_font.size = Pt(12)
-    
-    p__hiring_manager = input_doc.paragraphs[6]
-    p__name_of_role = input_doc.paragraphs[7]
-    p__default_av_toggle = input_doc.paragraphs[9]
-    p__company_name = input_doc.paragraphs[10]
-
-    p__hiring_manager.text = p__hiring_manager.text.replace("{{HIRING_MANAGER}}", request.args["recruiterName"])
-
-    nor_text = p__name_of_role.text.split("{{NAME_OF_ROLE}}")
-
-    p__name_of_role.text = ""
-    p__name_of_role.add_run(nor_text[0])
-    p__name_of_role.add_run(request.args["nameOfRole"]).bold = True
-    p__name_of_role.add_run(nor_text[1])
-
     cover_letter_content = request.args["coverLetterContent"]
+
     if cover_letter_content == "Self Driving":
-        p__default_av_toggle.text = "\tHaving followed the changing self-driving landscape closely since 2015, joining the research team at the EcoPRT autonomous vehicle lab at NC State was my first step in making my mark on the industry. Assuming the role of the lead web developer further enforced my technical skillset, with the goal of redesigning the web presence for showcasing the work of deploying an autonomous vehicle. Maintaining and organizing all of the assets and leveraging each new feature, along with overseeing the design and technical implementation of the website, demonstrates my ability to contribute and dedicate to a project within the scope of a professional environment."
+        outdir = "templates/cover_letter/sd/generated"
+    elif cover_letter_content == "Default":
+        outdir = "templates/cover_letter/default/generated"
 
-    p__company_name.text = p__company_name.text.replace("{{COMPANY_NAME}}", request.args["companyName"])
+    if applicant_role == "Software Engineer":
+        if cover_letter_content == "Self Driving":
+            input_filename = SOFTWARE_ENGINEER_PATH__SD_COVER_LETTER
+            output_filename = SOFTWARE_ENGINEER_PATH__SD_GENERATED_COVER_LETTER
+        elif cover_letter_content == "Default":
+            input_filename = SOFTWARE_ENGINEER_PATH__DEFAULT_COVER_LETTER
+            output_filename = SOFTWARE_ENGINEER_PATH__DEFAULT_GENERATED_COVER_LETTER
+    elif applicant_role == "Front End Engineer":
+        if cover_letter_content == "Self Driving":
+            input_filename = FRONT_END_ENGINEER_PATH__SD_COVER_LETTER
+            output_filename = FRONT_END_ENGINEER_PATH__SD_GENERATED_COVER_LETTER
+        elif cover_letter_content == "Default":
+            input_filename = FRONT_END_ENGINEER_PATH__DEFAULT_COVER_LETTER
+            output_filename = FRONT_END_ENGINEER_PATH__DEFAULT_GENERATED_COVER_LETTER
+    elif applicant_role == "Full Stack Engineer":
+        if cover_letter_content == "Self Driving":
+            input_filename = FULL_STACK_ENGINEER_PATH__SD_COVER_LETTER
+            output_filename = FULL_STACK_ENGINEER_PATH__SD_GENERATED_COVER_LETTER
+        elif cover_letter_content == "Default":
+            input_filename = FULL_STACK_ENGINEER_PATH__DEFAULT_COVER_LETTER
+            output_filename = FULL_STACK_ENGINEER_PATH__DEFAULT_GENERATED_COVER_LETTER
+    
+    with zipfile.ZipFile(input_filename, "r") as input_doc, zipfile.ZipFile(output_filename, "w") as output_doc:
+        for input_doc_info in input_doc.infolist():
+            with input_doc.open(input_doc_info) as input_doc_file:
+                content = input_doc_file.read()
+                if input_doc_info.filename == "content.xml":
 
-    input_doc.save(output_filename)
+                    name_of_role = request.args['nameOfRole']
+                    company_name = request.args['companyName']
+                    recruiter_name = request.args['recruiterName']
+
+                    content = content.replace(bytes("{{HIRING_MANAGER}}", "utf-8"), bytes(recruiter_name, "utf-8"))
+                    content = content.replace(bytes("{{NAME_OF_ROLE}}", "utf-8"), bytes(name_of_role, "utf-8"))
+                    content = content.replace(bytes("{{COMPANY_NAME}}", "utf-8"), bytes(company_name, "utf-8"))
+                output_doc.writestr(input_doc_info.filename, content)
+    
     pdf_filename = output_filename.replace(".odt", ".pdf")
-
-    import comtypes
-    import comtypes.client
-
-    comtypes.CoInitialize()
-
-    word = comtypes.client.CreateObject('Word.Application')
-    word.Visible = False
-
-    doc = word.Documents.Open(get_abs_path(output_filename))
-    doc.SaveAs(get_abs_path(pdf_filename), FileFormat=PDF_SAVE_MODE)
-    doc.Close()
-
-    word.Quit()
-
-    comtypes.CoUninitialize()
+    os.system(f"soffice --headless \"-env:UserInstallation=file:///tmp/AUTOCV\" --convert-to pdf:writer_pdf_Export --outdir {outdir} {output_filename}")
 
     github_pdf_path = f"Weston_P_Greene_Cover_Letter_{uuid.uuid4()}.pdf"
     pdf_contents = open(pdf_filename, "rb").read()
     github_response = repo.create_file(github_pdf_path, "Appending generated cover letter file", pdf_contents, branch="master")
 
-    os.remove(output_filename)
     os.remove(pdf_filename)
+    os.remove(output_filename)
 
     return jsonify(pdf=github_response['content'].download_url)
 

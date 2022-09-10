@@ -10,38 +10,32 @@ import os
 import uuid
 import zipfile
 
-HEADLESS_WORD_MODE = 1
-PDF_SAVE_MODE = 17
-
-RESUME_CV_FONT_NAME = "Radian Book"
-RESUME_CV_FONT_SIZE = 12
-
 TAB_TO_SPACES = "      "
 
 # Define paths for all application roles
-SOFTWARE_ENGINEER_PATH__MICROSERVICES_RESUME = "templates/resume/microservices/WPG_Software_Engineer.docx.zip"
-FRONT_END_ENGINEER_PATH__MICROSERVICES_RESUME = "templates/resume/microservices/WPG_Front_End_Engineer.docx.zip"
-FULL_STACK_ENGINEER_PATH__MICROSERVICES_RESUME = "templates/resume/microservices/WPG_Full_Stack_Engineer.docx.zip"
+SOFTWARE_ENGINEER_PATH__MICROSERVICES_RESUME = "templates/resume/microservices/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__MICROSERVICES_RESUME = "templates/resume/microservices/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__MICROSERVICES_RESUME = "templates/resume/microservices/WPG_Full_Stack_Engineer.odt"
 
-SOFTWARE_ENGINEER_PATH__DATABASES_RESUME = "templates/resume/databases/WPG_Software_Engineer.docx.zip"
-FRONT_END_ENGINEER_PATH__DATABASES_RESUME = "templates/resume/databases/WPG_Front_End_Engineer.docx.zip"
-FULL_STACK_ENGINEER_PATH__DATABASES_RESUME = "templates/resume/databases/WPG_Full_Stack_Engineer.docx.zip"
+SOFTWARE_ENGINEER_PATH__DATABASES_RESUME = "templates/resume/databases/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__DATABASES_RESUME = "templates/resume/databases/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__DATABASES_RESUME = "templates/resume/databases/WPG_Full_Stack_Engineer.odt"
 
-SOFTWARE_ENGINEER_PATH__MICROSERVICES_GENERATED_RESUME = "templates/resume/microservices/generated/WPG_Software_Engineer.docx.zip"
-FRONT_END_ENGINEER_PATH__MICROSERVICES_GENERATED_RESUME = "templates/resume/microservices/generated/WPG_Front_End_Engineer.docx.zip"
-FULL_STACK_ENGINEER_PATH__MICROSERVICES_GENERATED_RESUME = "templates/resume/microservices/generated/WPG_Full_Stack_Engineer.docx.zip"
+SOFTWARE_ENGINEER_PATH__MICROSERVICES_GENERATED_RESUME = "templates/resume/microservices/generated/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__MICROSERVICES_GENERATED_RESUME = "templates/resume/microservices/generated/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__MICROSERVICES_GENERATED_RESUME = "templates/resume/microservices/generated/WPG_Full_Stack_Engineer.odt"
 
-SOFTWARE_ENGINEER_PATH__DATABASES_GENERATED_RESUME = "templates/resume/databases/generated/WPG_Software_Engineer.docx.zip"
-FRONT_END_ENGINEER_PATH__DATABASES_GENERATED_RESUME = "templates/resume/databases/generated/WPG_Front_End_Engineer.docx.zip"
-FULL_STACK_ENGINEER_PATH__DATABASES_GENERATED_RESUME = "templates/resume/databases/generated/WPG_Full_Stack_Engineer.docx.zip"
+SOFTWARE_ENGINEER_PATH__DATABASES_GENERATED_RESUME = "templates/resume/databases/generated/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__DATABASES_GENERATED_RESUME = "templates/resume/databases/generated/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__DATABASES_GENERATED_RESUME = "templates/resume/databases/generated/WPG_Full_Stack_Engineer.odt"
 
-SOFTWARE_ENGINEER_PATH__COVER_LETTER = "templates/cover_letter/WPG_Software_Engineer.docx"
-FRONT_END_ENGINEER_PATH__COVER_LETTER = "templates/cover_letter/WPG_Front_End_Engineer.docx"
-FULL_STACK_ENGINEER_PATH__COVER_LETTER = "templates/cover_letter/WPG_Full_Stack_Engineer.docx"
+SOFTWARE_ENGINEER_PATH__COVER_LETTER = "templates/cover_letter/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__COVER_LETTER = "templates/cover_letter/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__COVER_LETTER = "templates/cover_letter/WPG_Full_Stack_Engineer.odt"
 
-SOFTWARE_ENGINEER_PATH__GENERATED_COVER_LETTER = "templates/cover_letter/generated/WPG_Software_Engineer.docx"
-FRONT_END_ENGINEER_PATH__GENERATED_COVER_LETTER = "templates/cover_letter/generated/WPG_Front_End_Engineer.docx"
-FULL_STACK_ENGINEER_PATH__GENERATED_COVER_LETTER = "templates/cover_letter/generated/WPG_Full_Stack_Engineer.docx"
+SOFTWARE_ENGINEER_PATH__GENERATED_COVER_LETTER = "templates/cover_letter/generated/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__GENERATED_COVER_LETTER = "templates/cover_letter/generated/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__GENERATED_COVER_LETTER = "templates/cover_letter/generated/WPG_Full_Stack_Engineer.odt"
 
 def get_abs_path(filename):
     return os.path.abspath(filename)
@@ -96,41 +90,22 @@ def generate_resume():
         for input_doc_info in input_doc.infolist():
             with input_doc.open(input_doc_info) as input_doc_file:
                 content = input_doc_file.read()
-                if input_doc_info.filename == "document.xml":
+                if input_doc_info.filename == "content.xml":
 
                     relevantSkills = request.args["relevantSkills"].split(",")
                     for (skill_index, skill) in enumerate(relevantSkills):
                         content = content.replace(bytes(f"{{{{L{skill_index + 1}}}}}", "utf-8"), bytes(skill, "utf-8"))
-
-                    output_doc.writestr(f"word/document.xml", content)
-                else:
-                    output_doc.writestr(input_doc_info.filename, content)
+                output_doc.writestr(input_doc_info.filename, content)
     
-    output_doc_renamed = output_filename[:-4]
-    pdf_filename = output_doc_renamed.replace(".docx", ".pdf")
-    os.rename(output_filename, output_doc_renamed)
-
-    import comtypes
-    import comtypes.client
-
-    comtypes.CoInitialize()
-
-    word = comtypes.client.CreateObject('Word.Application')
-    word.Visible = False
-
-    doc = word.Documents.Open(get_abs_path(output_doc_renamed))
-    doc.SaveAs(get_abs_path(pdf_filename), FileFormat=PDF_SAVE_MODE)
-    doc.Close()
-
-    word.Quit()
-
-    comtypes.CoUninitialize()
+    pdf_filename = output_filename.replace(".odt", ".pdf")
+    outdir = f"templates/resume/{competency.lower()}/generated"
+    os.system(f"soffice --headless \"-env:UserInstallation=file:///tmp/AUTOCV\" --convert-to pdf:writer_pdf_Export --outdir {outdir} {output_filename}")
 
     github_pdf_path = f"Weston_P_Greene_Resume_{uuid.uuid4()}.pdf"
     pdf_contents = open(pdf_filename, "rb").read()
     github_response = repo.create_file(github_pdf_path, "Appending generated resume file", pdf_contents, branch="master")
 
-    os.remove(output_doc_renamed)
+    os.remove(output_filename)
     os.remove(pdf_filename)
 
     return jsonify(pdf=github_response['content'].download_url)
@@ -189,7 +164,7 @@ def generate_cover_letter():
     p__company_name.text = p__company_name.text.replace("{{COMPANY_NAME}}", request.args["companyName"])
 
     input_doc.save(output_filename)
-    pdf_filename = output_filename.replace(".docx", ".pdf")
+    pdf_filename = output_filename.replace(".odt", ".pdf")
 
     import comtypes
     import comtypes.client

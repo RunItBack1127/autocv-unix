@@ -12,37 +12,42 @@ import tempfile
 TAB_TO_SPACES = "      "
 
 # Define paths for all application roles
-SOFTWARE_ENGINEER_PATH__MICROSERVICES_RESUME = "templates/resume/microservices/WPG_Software_Engineer.odt"
-FRONT_END_ENGINEER_PATH__MICROSERVICES_RESUME = "templates/resume/microservices/WPG_Front_End_Engineer.odt"
-FULL_STACK_ENGINEER_PATH__MICROSERVICES_RESUME = "templates/resume/microservices/WPG_Full_Stack_Engineer.odt"
+MICROSERVICES_DIR = "templates/resume/microservices"
+DATABASES_DIR = "templates/resume/databases"
+DEFAULT_COVER_LETTER_DIR = "templates/cover_letter/default"
+SD_COVER_LETTER_DIR = "templates/cover_letter/sd"
 
-SOFTWARE_ENGINEER_PATH__DATABASES_RESUME = "templates/resume/databases/WPG_Software_Engineer.odt"
-FRONT_END_ENGINEER_PATH__DATABASES_RESUME = "templates/resume/databases/WPG_Front_End_Engineer.odt"
-FULL_STACK_ENGINEER_PATH__DATABASES_RESUME = "templates/resume/databases/WPG_Full_Stack_Engineer.odt"
+SOFTWARE_ENGINEER_PATH__MICROSERVICES_RESUME = f"{MICROSERVICES_DIR}/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__MICROSERVICES_RESUME = f"{MICROSERVICES_DIR}/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__MICROSERVICES_RESUME = f"{MICROSERVICES_DIR}/WPG_Full_Stack_Engineer.odt"
 
-SOFTWARE_ENGINEER_PATH__MICROSERVICES_GENERATED_RESUME = "templates/resume/microservices/generated/WPG_Software_Engineer.odt"
-FRONT_END_ENGINEER_PATH__MICROSERVICES_GENERATED_RESUME = "templates/resume/microservices/generated/WPG_Front_End_Engineer.odt"
-FULL_STACK_ENGINEER_PATH__MICROSERVICES_GENERATED_RESUME = "templates/resume/microservices/generated/WPG_Full_Stack_Engineer.odt"
+SOFTWARE_ENGINEER_PATH__DATABASES_RESUME = f"{DATABASES_DIR}/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__DATABASES_RESUME = f"{DATABASES_DIR}/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__DATABASES_RESUME = f"{DATABASES_DIR}/WPG_Full_Stack_Engineer.odt"
 
-SOFTWARE_ENGINEER_PATH__DATABASES_GENERATED_RESUME = "templates/resume/databases/generated/WPG_Software_Engineer.odt"
-FRONT_END_ENGINEER_PATH__DATABASES_GENERATED_RESUME = "templates/resume/databases/generated/WPG_Front_End_Engineer.odt"
-FULL_STACK_ENGINEER_PATH__DATABASES_GENERATED_RESUME = "templates/resume/databases/generated/WPG_Full_Stack_Engineer.odt"
+SOFTWARE_ENGINEER_PATH__MICROSERVICES_GENERATED_RESUME = f"{MICROSERVICES_DIR}/generated/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__MICROSERVICES_GENERATED_RESUME = f"{MICROSERVICES_DIR}/generated/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__MICROSERVICES_GENERATED_RESUME = f"{MICROSERVICES_DIR}/generated/WPG_Full_Stack_Engineer.odt"
 
-SOFTWARE_ENGINEER_PATH__DEFAULT_COVER_LETTER = "templates/cover_letter/default/WPG_Software_Engineer.odt"
-FRONT_END_ENGINEER_PATH__DEFAULT_COVER_LETTER = "templates/cover_letter/default/WPG_Front_End_Engineer.odt"
-FULL_STACK_ENGINEER_PATH__DEFAULT_COVER_LETTER = "templates/cover_letter/default/WPG_Full_Stack_Engineer.odt"
+SOFTWARE_ENGINEER_PATH__DATABASES_GENERATED_RESUME = f"{DATABASES_DIR}/generated/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__DATABASES_GENERATED_RESUME = f"{DATABASES_DIR}/generated/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__DATABASES_GENERATED_RESUME = f"{DATABASES_DIR}/generated/WPG_Full_Stack_Engineer.odt"
 
-SOFTWARE_ENGINEER_PATH__DEFAULT_GENERATED_COVER_LETTER = "templates/cover_letter/default/generated/WPG_Software_Engineer.odt"
-FRONT_END_ENGINEER_PATH__DEFAULT_GENERATED_COVER_LETTER = "templates/cover_letter/default/generated/WPG_Front_End_Engineer.odt"
-FULL_STACK_ENGINEER_PATH__DEFAULT_GENERATED_COVER_LETTER = "templates/cover_letter/default/generated/WPG_Full_Stack_Engineer.odt"
+SOFTWARE_ENGINEER_PATH__DEFAULT_COVER_LETTER = f"{DEFAULT_COVER_LETTER_DIR}/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__DEFAULT_COVER_LETTER = f"{DEFAULT_COVER_LETTER_DIR}/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__DEFAULT_COVER_LETTER = f"{DEFAULT_COVER_LETTER_DIR}/WPG_Full_Stack_Engineer.odt"
 
-SOFTWARE_ENGINEER_PATH__SD_COVER_LETTER = "templates/cover_letter/sd/WPG_Software_Engineer.odt"
-FRONT_END_ENGINEER_PATH__SD_COVER_LETTER = "templates/cover_letter/sd/WPG_Front_End_Engineer.odt"
-FULL_STACK_ENGINEER_PATH__SD_COVER_LETTER = "templates/cover_letter/sd/WPG_Full_Stack_Engineer.odt"
+SOFTWARE_ENGINEER_PATH__DEFAULT_GENERATED_COVER_LETTER = f"{DEFAULT_COVER_LETTER_DIR}/generated/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__DEFAULT_GENERATED_COVER_LETTER = f"{DEFAULT_COVER_LETTER_DIR}/generated/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__DEFAULT_GENERATED_COVER_LETTER = f"{DEFAULT_COVER_LETTER_DIR}/generated/WPG_Full_Stack_Engineer.odt"
 
-SOFTWARE_ENGINEER_PATH__SD_GENERATED_COVER_LETTER = "templates/cover_letter/sd/generated/WPG_Software_Engineer.odt"
-FRONT_END_ENGINEER_PATH__SD_GENERATED_COVER_LETTER = "templates/cover_letter/sd/generated/WPG_Front_End_Engineer.odt"
-FULL_STACK_ENGINEER_PATH__SD_GENERATED_COVER_LETTER = "templates/cover_letter/sd/generated/WPG_Full_Stack_Engineer.odt"
+SOFTWARE_ENGINEER_PATH__SD_COVER_LETTER = f"{SD_COVER_LETTER_DIR}/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__SD_COVER_LETTER = f"{SD_COVER_LETTER_DIR}/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__SD_COVER_LETTER = f"{SD_COVER_LETTER_DIR}/WPG_Full_Stack_Engineer.odt"
+
+SOFTWARE_ENGINEER_PATH__SD_GENERATED_COVER_LETTER = f"{SD_COVER_LETTER_DIR}/generated/WPG_Software_Engineer.odt"
+FRONT_END_ENGINEER_PATH__SD_GENERATED_COVER_LETTER = f"{SD_COVER_LETTER_DIR}/generated/WPG_Front_End_Engineer.odt"
+FULL_STACK_ENGINEER_PATH__SD_GENERATED_COVER_LETTER = f"{SD_COVER_LETTER_DIR}/generated/WPG_Full_Stack_Engineer.odt"
 
 def get_abs_path(filename):
     return os.path.abspath(filename)
@@ -105,7 +110,13 @@ def generate_resume():
                 output_doc.writestr(input_doc_info.filename, content)
     
     pdf_filename = output_filename.replace(".odt", ".pdf")
-    outdir = f"templates/resume/{competency.lower()}/generated"
+
+    outdir = ""
+    if competency == "Microservices":
+        outdir = f"{MICROSERVICES_DIR}/generated"
+    elif competency == "Databases":
+        outdir = f"{DATABASES_DIR}/generated"
+
     tmp_dir = tempfile.gettempdir()
     os.system(f"soffice --headless \"-env:UserInstallation=file:///{tmp_dir}/AUTOCV\" --convert-to pdf:writer_pdf_Export --outdir {outdir} {output_filename}")
 
@@ -137,9 +148,9 @@ def generate_cover_letter():
     cover_letter_content = request.args["coverLetterContent"]
 
     if cover_letter_content == "Self Driving":
-        outdir = "templates/cover_letter/sd/generated"
+        outdir = f"{SD_COVER_LETTER_DIR}/generated"
     elif cover_letter_content == "Default":
-        outdir = "templates/cover_letter/default/generated"
+        outdir = f"{DEFAULT_COVER_LETTER_DIR}/generated"
 
     if applicant_role == "Software Engineer":
         if cover_letter_content == "Self Driving":

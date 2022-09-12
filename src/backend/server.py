@@ -60,15 +60,15 @@ github = Github(os.environ.get("GITHUB_TOKEN"))
 repo = github.get_user().get_repo("autocv-cover-letters")
 
 # Initialize generation directories
-create_dir(f"{MICROSERVICES_DIR}/generated")
-create_dir(f"{DATABASES_DIR}/generated")
-create_dir(f"{DEFAULT_COVER_LETTER_DIR}/generated")
-create_dir(f"{SD_COVER_LETTER_DIR}/generated")
-
 def create_dir(dirname):
     if os.path.exists(dirname):
         return
     os.mkdir(dirname)
+
+create_dir(f"{MICROSERVICES_DIR}/generated")
+create_dir(f"{DATABASES_DIR}/generated")
+create_dir(f"{DEFAULT_COVER_LETTER_DIR}/generated")
+create_dir(f"{SD_COVER_LETTER_DIR}/generated")
 
 """
     GET endpoint for populating the resume template,

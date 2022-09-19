@@ -16,8 +16,8 @@ dist-ssr
 src/backend/venv
 
 # Ignore all generated PDF and DOCX files
-src/backend/templates/*/generated/*.pdf
-src/backend/templates/*/generated/*.docx
+src/backend/templates/*/*/generated/*.pdf
+src/backend/templates/*/*/generated/*.odt
 
 # Editor directories and files
 .vscode/*

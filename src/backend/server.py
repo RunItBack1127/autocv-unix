@@ -57,13 +57,21 @@ app = Flask(__name__)
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 github = Github(os.environ.get("GITHUB_TOKEN"))
-repo = github.get_user().get_repo("autocv-cover-letters")
+repo = github.get_user().get_repo("autocv-blob-storage")
 
 # Initialize generation directories
 def create_dir(dirname):
     if os.path.exists(dirname):
         return
     os.mkdir(dirname)
+
+# GitHub PDF filename generation
+def get_pdf_filename():
+    return f"{str(uuid.uuid4()).replace('-', '')}.pdf"
+
+# ODT to PDF filename conversion
+def convert_extension_to_pdf( filename ):
+    return f"{filename[:-4]}.pdf"
 
 create_dir(f"{MICROSERVICES_DIR}/generated")
 create_dir(f"{DATABASES_DIR}/generated")
@@ -83,9 +91,15 @@ create_dir(f"{SD_COVER_LETTER_DIR}/generated")
 def generate_resume():
     input_filename = ""
     output_filename = ""
+    outdir = ""
 
     applicant_role = request.args["applicantRole"]
     competency = request.args["competency"]
+
+    if competency == "Microservices":
+        outdir = f"{MICROSERVICES_DIR}/generated"
+    elif competency == "Databases":
+        outdir = f"{DATABASES_DIR}/generated"
 
     if applicant_role == "Software Engineer":
         if competency == "Microservices":
@@ -120,25 +134,18 @@ def generate_resume():
                         content = content.replace(bytes(f"{{{{L{skill_index + 1}}}}}", "utf-8"), bytes(skill, "utf-8"))
                 output_doc.writestr(input_doc_info.filename, content)
     
-    pdf_filename = output_filename.replace(".odt", ".pdf")
-
-    outdir = ""
-    if competency == "Microservices":
-        outdir = f"{MICROSERVICES_DIR}/generated"
-    elif competency == "Databases":
-        outdir = f"{DATABASES_DIR}/generated"
-
+    pdf_filename = convert_extension_to_pdf( output_filename )
     tmp_dir = tempfile.gettempdir()
     os.system(f"soffice --headless \"-env:UserInstallation=file:///{tmp_dir}/AUTOCV\" --convert-to pdf:writer_pdf_Export --outdir {outdir} {output_filename}")
 
-    github_pdf_path = f"Weston_P_Greene_Resume_{uuid.uuid4()}.pdf"
+    github_pdf_path = get_pdf_filename()
     pdf_contents = open(pdf_filename, "rb").read()
     github_response = repo.create_file(github_pdf_path, "Appending generated resume file", pdf_contents, branch="master")
 
     os.remove(output_filename)
     os.remove(pdf_filename)
 
-    return jsonify(pdf=github_response['content'].download_url)
+    return jsonify(url=github_response['content'].download_url)
 
 """
     GET endpoint for populating the cover letter
@@ -200,18 +207,18 @@ def generate_cover_letter():
                     content = content.replace(bytes("{{COMPANY_NAME}}", "utf-8"), bytes(company_name, "utf-8"))
                 output_doc.writestr(input_doc_info.filename, content)
     
-    pdf_filename = output_filename.replace(".odt", ".pdf")
+    pdf_filename = convert_extension_to_pdf( output_filename )
     tmp_dir = tempfile.gettempdir()
     os.system(f"soffice --headless \"-env:UserInstallation=file:///{tmp_dir}/AUTOCV\" --convert-to pdf:writer_pdf_Export --outdir {outdir} {output_filename}")
 
-    github_pdf_path = f"Weston_P_Greene_Cover_Letter_{uuid.uuid4()}.pdf"
+    github_pdf_path = get_pdf_filename()
     pdf_contents = open(pdf_filename, "rb").read()
     github_response = repo.create_file(github_pdf_path, "Appending generated cover letter file", pdf_contents, branch="master")
 
     os.remove(pdf_filename)
     os.remove(output_filename)
 
-    return jsonify(pdf=github_response['content'].download_url)
+    return jsonify(url=github_response['content'].download_url)
 
 """
     GET endpoint for retrieving a formatted template cover letter
@@ -232,7 +239,7 @@ def copy_cover_letter():
     elif cover_letter_content == "Default":
         default_or_av_paragraph = "Contributing in a team on a large project across many different microservices also improved my overall technical skillset, placing me in many different roles for various parts of the development cycle - working in the DevEx team at SailPoint required me to sometimes assume frontend responsibilities, other times required a richer set of backend skills, and a few times would require me to exercise more of my full stack expertise. Ensuring effective communication across teams and within our own team was critical, and deploying a consistent and functional product for the end user was kept as our paramount goal, in spite of a specific set of technologies necessary."
 
-    contents = f"Dear {recruiter_name},\n\n{TAB_TO_SPACES}I wanted to reach out to you to further express my interest in the {name_of_role} position. As a recent graduate of the Computer Science program at North Carolina State University, a Software Engineer Intern for SailPoint Technologies, and as the current lead web developer for the EcoPRT autonomous vehicle lab at NC State, I believe that my technically sound and detailed set of front end skills and coding architecture expertise, along with my ability to collaborate, communicate, and implement punctually within a team, would make me an ideal candidate for this role.\n\n{TAB_TO_SPACES}I possess a strong facility in an array of frontend languages, notably Vue, Node.js and Typescript, along with a robust set of backend technologies in Java, C and C++, and Python. My capacity for developing alone for either personal projects, coursework, or independent lab work would integrate seamlessly with a larger team – I can be expected to fulfill expectations concisely, accurately, and under demanding and changing time constraints without sacrificing quality or project longevity.\n\n{TAB_TO_SPACES}{default_or_av_paragraph}\n\n{TAB_TO_SPACES}My passion and dedication are the qualities I strive to bring to the position and the team. I am confident that I can work diligently with my potential co-workers and further promote the development process of {company_name}. Thank you for your consideration, and I look forward to hearing from you to discuss the position further.\n\n\nSincerely,\nWeston P. Greene"
+    contents = f"Dear {recruiter_name},\n\n{TAB_TO_SPACES}I wanted to reach out to you to further express my interest in the {name_of_role} position. As a recent graduate of the Computer Science program at North Carolina State University, a Software Engineer Intern for SailPoint Technologies, and as the current lead web developer for the EcoPRT autonomous vehicle lab at NC State, I believe that my technically sound and detailed set of front end skills and coding architecture expertise, along with my ability to collaborate, communicate, and implement punctually within a team, would make me an ideal candidate for this role.\n\n{TAB_TO_SPACES}I possess a strong facility in an array of frontend languages, notably Vue, Node.js and Typescript, along with a robust set of backend technologies in Java, C and C++, and Python. My capacity for developing alone for either personal projects, coursework, or independent lab work would integrate seamlessly with a larger team – I can be expected to fulfill expectations concisely, accurately, and under demanding and changing time constraints without sacrificing quality or project longevity.\n\n{TAB_TO_SPACES}{default_or_av_paragraph}\n\n{TAB_TO_SPACES}My passion and dedication are the qualities I strive to bring to the position and the team. I am confident that I can work diligently with my potential co-workers and further promote the development process of {company_name}. Thank you for your consideration, and I look forward to hearing from you to discuss the position further.\n\nSincerely,\nWeston P. Greene"
 
     return jsonify(contents=contents)
 

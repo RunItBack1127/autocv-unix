@@ -82,7 +82,7 @@ export default defineComponent({
                         applicantRole: store.state.settings.applicantRole
                     }
                 }).then((response) => {
-                    window.open(response.data.pdf);
+                    window.open(response.data.url);
                 }).catch((e) => {
                     console.error(e);
                 }).finally(() => {

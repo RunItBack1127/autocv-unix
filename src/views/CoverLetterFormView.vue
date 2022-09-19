@@ -58,7 +58,7 @@ export default defineComponent({
                         coverLetterContent: store.state.settings.coverLetterContent
                     }
                 }).then((response) => {
-                    window.open(response.data.pdf);
+                    window.open(response.data.url);
                 }).catch((e) => {
                     console.error(e);
                 }).finally(() => {

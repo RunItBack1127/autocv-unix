@@ -25,6 +25,12 @@
             </ul>
             <LoadingScreen />
         </aside>
+        <button
+            @click="resetAllFields"
+            class="resetContainer">
+
+            <img src="restart.png" />
+        </button>
         <router-view></router-view>
     </main>
 </template>
@@ -88,6 +94,23 @@ export default defineComponent({
                     this.setShowCopySuccess(false);
                     console.error(e);
                 });
+            },
+            resetAllFields() {
+                // Resume reset
+                store.state.resume.relevantSkills = [];
+                store.state.resume.competency = 'Microservices';
+
+                // Cover letter reset
+                store.state.coverLetter.nameOfRole = "";
+                store.state.coverLetter.companyName = "";
+                store.state.coverLetter.recruiterName = "";
+                store.state.coverLetter.useCustomRecruiterName = false;
+
+                // Settings reset
+                store.state.settings.applicantRole = 'Software Engineer';
+                store.state.settings.coverLetterContent = 'Default';
+                store.state.settings.graduationMonth = 'August';
+                store.state.settings.graduationYear = '2022';
             }
         }
     }
@@ -216,6 +239,32 @@ main {
             li:not(:last-child) {
                 margin-bottom: 15px;
             }
+        }
+    }
+
+    .resetContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        border-radius: 50px;
+        width: 60px;
+        height: 60px;
+        opacity: 0.25;
+        background: none;
+        border: none;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        transition: opacity 200ms ease;
+
+        img {
+            width: 30px;
+            height: 30px;
+        }
+
+        &:hover{
+            opacity: 1.0;
         }
     }
 }

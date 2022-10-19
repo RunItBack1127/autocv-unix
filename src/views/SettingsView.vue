@@ -22,13 +22,23 @@
                 <h1>Cover Letter Content</h1>
                 <p>Changes third paragraph of the cover letter</p>
             </div>
-            <div className="avToggleInner">
+            <div class="avToggleInner">
                 <button
                     :class="coverLetterContent === 'Default' ? 'current-selection' : ''"
                     @click.self="setCoverLetterContent('Default')">Default</button>
                 <button
                     :class="coverLetterContent === 'Self Driving' ? 'current-selection' : ''"
                     @click.self="setCoverLetterContent('Self Driving')">Self Driving</button>
+            </div>
+        </section>
+        <section class="graduationContainer">
+            <div class="titleContainer">
+                <h1>Graduation Date</h1>
+                <p>Adjusts graduation date for the specific role</p>
+            </div>
+            <div class="graduationInner">
+                <input value="August" />
+                <input value="2022" />
             </div>
         </section>
     </article>
@@ -50,6 +60,12 @@ export default defineComponent({
             coverLetterContent: computed(() => store.state.settings.coverLetterContent),
             setApplicantRole: (role: string) => store.state.settings.applicantRole = role,
             setCoverLetterContent: (content: string) => store.state.settings.coverLetterContent = content
+        }
+    },
+    methods: {
+        field(e: MouseEvent) {
+            const target = e.target as HTMLInputElement;
+            target.dispatchEvent(new MouseEvent('dblclick'));
         }
     }
 })
@@ -94,10 +110,32 @@ article {
                 opacity: 1.0;
             }
         }
+
+        &:not(:last-child) {
+            margin-bottom: 100px;
+        }
+
+        &.graduationContainer {
+
+            .graduationInner {
+                grid-template-columns: 1fr 1fr;
+                gap: 0 30px;
+
+                input {
+                    width: 100%;
+                    padding: 30px 0;
+                    border-radius: 10px;
+                    border: 1px solid #000;
+                    font-size: 1.2rem;
+                    background: #000;
+                    text-align: center;
+                    color: #fff;
+                }
+            }
+        }
     }
 
     section.applicantRoleContainer {
-        margin-bottom: 100px;
 
         .applicantRoleInner {
             grid-template-columns: 1fr 1fr;

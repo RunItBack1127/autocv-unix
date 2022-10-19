@@ -29,7 +29,7 @@
             @click="resetAllFields"
             class="resetContainer">
 
-            <img src="restart.png" />
+            <img src="reset.png" />
         </button>
         <router-view></router-view>
     </main>

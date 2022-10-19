@@ -49,19 +49,25 @@ export default defineComponent({
     data() {
         const store = useStore();
 
+        function capitalize( skill: string ) {
+            return `${skill[0].toUpperCase()}${skill.slice(1)}`;
+        }
+
         return {
             REMOVE_SKILL: ModifySkillMethod.REMOVE,
             skills: computed(() => store.state.resume.relevantSkills),
             competency: computed(() => store.state.resume.competency),
             setCompetency: (competency: string) => store.state.resume.competency = competency,
             addSkill: (skill: string) => {
-                if(!store.state.resume.relevantSkills.includes(skill)) {
-                    store.state.resume.relevantSkills.push(skill);
+                const addSkill = capitalize( skill );
+                if(!store.state.resume.relevantSkills.includes(addSkill)) {
+                    store.state.resume.relevantSkills.push(addSkill);
                 }
             },
             removeSkill: (skill: string) => {
+                const refSkill = capitalize( skill );
                 store.state.resume.relevantSkills = store.state.resume.relevantSkills.filter((sk: string) => {
-                    return sk !== skill;
+                    return sk !== refSkill;
                 });
             },
             setBodyOverflow(overflow: string) {

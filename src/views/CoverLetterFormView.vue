@@ -48,11 +48,13 @@ export default defineComponent({
                 store.state.showLoadingScreen = true;
                 this.setBodyOverflow("hidden");
 
+                const companyName = store.state.coverLetter.companyName;
+
                 axios.get("http://localhost:8000/cv", {
                     params: {
                         recruiterName: !store.state.coverLetter.useCustomRecruiterName ?
-                            'Corporate Recruiter' : store.state.coverLetter.recruiterName,
-                        companyName: store.state.coverLetter.companyName,
+                            `${companyName} Hiring Manager` : store.state.coverLetter.recruiterName,
+                        companyName,
                         nameOfRole: store.state.coverLetter.nameOfRole,
                         applicantRole: store.state.settings.applicantRole,
                         coverLetterContent: store.state.settings.coverLetterContent

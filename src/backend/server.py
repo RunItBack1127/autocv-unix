@@ -95,6 +95,8 @@ def generate_resume():
 
     applicant_role = request.args["applicantRole"]
     competency = request.args["competency"]
+    graduation_month = request.args["graduationMonth"][:3]
+    graduation_year = request.args["graduationYear"]
 
     if competency == "Microservices":
         outdir = f"{MICROSERVICES_DIR}/generated"
@@ -122,6 +124,9 @@ def generate_resume():
         elif competency == "Databases":
             input_filename = FULL_STACK_ENGINEER_PATH__DATABASES_RESUME
             output_filename = FULL_STACK_ENGINEER_PATH__DATABASES_GENERATED_RESUME
+    
+    def to_bytes( str ):
+        return bytes( str, 'utf-8' )
 
     with zipfile.ZipFile(input_filename, "r") as input_doc, zipfile.ZipFile(output_filename, "w") as output_doc:
         for input_doc_info in input_doc.infolist():
@@ -131,7 +136,10 @@ def generate_resume():
 
                     relevantSkills = request.args["relevantSkills"].split(",")
                     for (skill_index, skill) in enumerate(relevantSkills):
-                        content = content.replace(bytes(f"{{{{L{skill_index + 1}}}}}", "utf-8"), bytes(skill, "utf-8"))
+                        content = content.replace(to_bytes(f"{{{{L{skill_index + 1}}}}}"), to_bytes(skill))
+
+                    content = content.replace(to_bytes(f"{{{{GRAD_MONTH}}}}"), to_bytes(graduation_month))
+                    content = content.replace(to_bytes(f"{{{{GRAD_YEAR}}}}"), to_bytes(graduation_year))
                 output_doc.writestr(input_doc_info.filename, content)
     
     pdf_filename = convert_extension_to_pdf( output_filename )

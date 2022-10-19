@@ -85,7 +85,9 @@ export default defineComponent({
                     params: {
                         competency: store.state.resume.competency,
                         relevantSkills: store.state.resume.relevantSkills.join(","),
-                        applicantRole: store.state.settings.applicantRole
+                        applicantRole: store.state.settings.applicantRole,
+                        graduationMonth: store.state.settings.graduationMonth,
+                        graduationYear: store.state.settings.graduationYear
                     }
                 }).then((response) => {
                     window.open(response.data.url);

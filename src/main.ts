@@ -52,7 +52,9 @@ const store = createStore({
             },
             settings: {
                 applicantRole: 'Software Engineer',
-                coverLetterContent: 'Default'
+                coverLetterContent: 'Default',
+                graduationMonth: 'August',
+                graduationYear: 2022
             },
             showLoadingScreen: false
         }

@@ -37,8 +37,12 @@
                 <p>Adjusts graduation date for the specific role</p>
             </div>
             <div class="graduationInner">
-                <input value="August" />
-                <input value="2022" />
+                <input
+                    @change="setGraduationMonth"
+                    v-model="graduationMonth" />
+                <input
+                    @change="setGraduationYear"
+                    v-model="graduationYear" />
             </div>
         </section>
     </article>
@@ -58,14 +62,29 @@ export default defineComponent({
         return {
             applicantRole: computed(() => store.state.settings.applicantRole),
             coverLetterContent: computed(() => store.state.settings.coverLetterContent),
+            graduationMonth: computed(() => store.state.settings.graduationMonth),
+            graduationYear: computed(() => {
+                return `${store.state.settings.graduationYear}`
+            }),
             setApplicantRole: (role: string) => store.state.settings.applicantRole = role,
-            setCoverLetterContent: (content: string) => store.state.settings.coverLetterContent = content
-        }
-    },
-    methods: {
-        field(e: MouseEvent) {
-            const target = e.target as HTMLInputElement;
-            target.dispatchEvent(new MouseEvent('dblclick'));
+            setCoverLetterContent: (content: string) => store.state.settings.coverLetterContent = content,
+            setGraduationMonth: (e: Event) => {
+                const target = e.target as HTMLInputElement;
+                const month = target.value;
+                store.state.settings.graduationMonth = month
+            },
+            setGraduationYear: (e: Event) => {
+                const target = e.target as HTMLInputElement;
+                const year = target.value;
+
+                function isValidYear( year: string ) {
+                    return ![...year].some((letter) => isNaN(parseInt( letter )));
+                }
+
+                if( isValidYear( year ) ) {
+                    store.state.settings.graduationYear = year;
+                }
+            }
         }
     }
 })
